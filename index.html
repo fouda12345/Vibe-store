@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIBE | Modern Fashion Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              display: ["Playfair Display", "serif"],
+            },
+            colors: {
+              primary: {
+                50: "#fdf4ff",
+                100: "#fae8ff",
+                200: "#f5d0fe",
+                300: "#f0abfc",
+                400: "#e879f9",
+                500: "#d946ef",
+                600: "#c026d3",
+                700: "#a21caf",
+                800: "#86198f",
+                900: "#701a75",
+              },
+              accent: {
+                50: "#fff7ed",
+                100: "#ffedd5",
+                200: "#fed7aa",
+                300: "#fdba74",
+                400: "#fb923c",
+                500: "#f97316",
+                600: "#ea580c",
+                700: "#c2410c",
+                800: "#9a3412",
+                900: "#7c2d12",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      .slide-up {
+        animation: slideUp 0.5s ease-out;
+      }
+
+      .bounce-in {
+        animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          transform: scale(0.3);
+          opacity: 0;
+        }
+
+        50% {
+          transform: scale(1.05);
+        }
+
+        70% {
+          transform: scale(0.9);
+        }
+
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .product-card:hover .product-image {
+        transform: scale(1.05);
+      }
+
+      .product-image {
+        transition: transform 0.5s ease;
+      }
+
+      .nav-link {
+        position: relative;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: #d946ef;
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #d946ef 0%, #f97316 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .dark .glass-effect {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .mobile-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .mobile-sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-overlay {
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.3s ease-in-out,
+          visibility 0.3s ease-in-out;
+      }
+
+      .sidebar-overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+  >
+    <div
+      id="sidebar-overlay"
+      class="sidebar-overlay fixed inset-0 bg-black/50 z-40 lg:hidden"
+      onclick="App.toggleMobileSidebar()"
+    ></div>
+
+    <div
+      id="mobile-sidebar"
+      class="mobile-sidebar fixed top-0 left-0 h-full w-80 bg-white dark:bg-gray-900 z-50 shadow-2xl lg:hidden overflow-y-auto"
+    >
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-8">
+          <h1 class="text-2xl font-display font-bold gradient-text">VIBE</h1>
+          <button
+            onclick="App.toggleMobileSidebar()"
+            class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <nav class="space-y-4 mb-8">
+          <a
+            onclick="
+              App.toggleMobileSidebar();
+              Router.navigate('home');
+            "
+            class="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition cursor-pointer"
+          >
+            Home
+          </a>
+          <a
+            onclick="
+              App.toggleMobileSidebar();
+              Router.navigate('shop');
+            "
+            class="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition cursor-pointer"
+          >
+            Shop
+          </a>
+          <a
+            onclick="
+              App.toggleMobileSidebar();
+              Router.navigate('about');
+            "
+            class="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition cursor-pointer"
+          >
+            About
+          </a>
+        </nav>
+
+        <div class="mb-8">
+          <h3
+            class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4 px-4"
+          >
+            Categories
+          </h3>
+          <div class="space-y-2">
+            <a
+              onclick="
+                App.toggleMobileSidebar();
+                Router.navigate('shop', { category: 'Men' });
+              "
+              class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition cursor-pointer"
+            >
+              Men
+            </a>
+            <a
+              onclick="
+                App.toggleMobileSidebar();
+                Router.navigate('shop', { category: 'Women' });
+              "
+              class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition cursor-pointer"
+            >
+              Women
+            </a>
+            <a
+              onclick="
+                App.toggleMobileSidebar();
+                Router.navigate('shop', { category: 'Accessories' });
+              "
+              class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition cursor-pointer"
+            >
+              Accessories
+            </a>
+          </div>
+        </div>
+
+        <div
+          id="mobile-user-section"
+          class="border-t border-gray-200 dark:border-gray-700 pt-6"
+        >
+        </div>
+
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
+          <button
+            onclick="App.toggleTheme()"
+            class="flex items-center gap-3 w-full py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          >
+            <svg
+              id="mobile-theme-icon"
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+              ></path>
+            </svg>
+            <span id="mobile-theme-text">Dark Mode</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <nav
+      class="fixed w-full z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <button
+            onclick="App.toggleMobileSidebar()"
+            class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            </svg>
+          </button>
+
+          <div
+            class="flex-shrink-0 cursor-pointer"
+            onclick="Router.navigate('home')"
+          >
+            <h1 class="text-2xl font-display font-bold gradient-text">VIBE</h1>
+          </div>
+
+          <div class="hidden lg:flex items-center space-x-8">
+            <a
+              onclick="Router.navigate('home')"
+              class="nav-link cursor-pointer text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition"
+              >Home</a
+            >
+            <a
+              onclick="Router.navigate('shop')"
+              class="nav-link cursor-pointer text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition"
+              >Shop</a
+            >
+            <a
+              onclick="Router.navigate('about')"
+              class="nav-link cursor-pointer text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition"
+              >About</a
+            >
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <button
+              onclick="App.toggleTheme()"
+              class="hidden lg:block p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            >
+              <svg
+                id="theme-icon"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                ></path>
+              </svg>
+            </button>
+
+            <button
+              onclick="Router.navigate('cart')"
+              class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                ></path>
+              </svg>
+              <span
+                id="cart-count"
+                class="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden"
+                >0</span
+              >
+            </button>
+
+            <div
+              id="auth-buttons"
+              class="items-center space-x-2 hidden lg:flex"
+            >
+              <button
+                onclick="Router.navigate('login')"
+                class="text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition"
+              >
+                Login
+              </button>
+              <button
+                onclick="Router.navigate('signup')"
+                class="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition transform hover:scale-105"
+              >
+                Sign Up
+              </button>
+            </div>
+
+            <div id="user-menu" class="items-center hidden lg:flex relative">
+              <button
+                onclick="App.toggleUserMenu()"
+                class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              >
+                <div
+                  class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-accent-500 flex items-center justify-center text-white font-bold text-sm"
+                  id="user-avatar"
+                >
+                  U
+                </div>
+                <span id="user-name" class="text-sm font-medium hidden lg:block"
+                  >User</span
+                >
+                <svg
+                  class="w-4 h-4 hidden lg:block"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
+                </svg>
+              </button>
+
+              <div
+                id="user-dropdown"
+                class="hidden absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50"
+              >
+                <a
+                  onclick="Router.navigate('profile')"
+                  class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                  >Profile</a
+                >
+                <a
+                  onclick="Router.navigate('orders')"
+                  class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                  >My Orders</a
+                >
+                <div
+                  class="border-t border-gray-200 dark:border-gray-700 my-1"
+                ></div>
+                <a
+                  onclick="Auth.logout()"
+                  class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                  >Logout</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main id="app" class="pt-16 min-h-screen">
+    </main>
+
+    <footer class="bg-gray-900 text-white py-12 mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-2xl font-display font-bold gradient-text mb-4">
+              VIBE
+            </h3>
+            <p class="text-gray-400 text-sm">
+              Modern fashion for the bold and creative. Express yourself with
+              our curated collection.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Shop</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li>
+                <a
+                  onclick="Router.navigate('shop')"
+                  class="hover:text-white cursor-pointer"
+                  >All Products</a
+                >
+              </li>
+              <li>
+                <a
+                  onclick="Router.navigate('shop', { category: 'Men' })"
+                  class="hover:text-white cursor-pointer"
+                  >Men</a
+                >
+              </li>
+              <li>
+                <a
+                  onclick="Router.navigate('shop', { category: 'Women' })"
+                  class="hover:text-white cursor-pointer"
+                  >Women</a
+                >
+              </li>
+              <li>
+                <a
+                  onclick="Router.navigate('shop', { category: 'Accessories' })"
+                  class="hover:text-white cursor-pointer"
+                  >Accessories</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Support</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li><a href="#" class="hover:text-white">FAQ</a></li>
+              <li><a href="#" class="hover:text-white">Shipping</a></li>
+              <li><a href="#" class="hover:text-white">Returns</a></li>
+              <li><a href="#" class="hover:text-white">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Newsletter</h4>
+            <div class="flex">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                class="flex-1 px-4 py-2 rounded-l-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-primary-500"
+              />
+              <button
+                class="px-4 py-2 bg-primary-600 rounded-r-lg hover:bg-primary-700 transition text-sm font-medium"
+              >
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400"
+        >
+          <p>&copy; 2024 VIBE. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <div
+      id="toast-container"
+      class="fixed bottom-4 right-4 z-50 space-y-2"
+    ></div>
+
+    <script src="data/products.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/product.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/checkout.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
